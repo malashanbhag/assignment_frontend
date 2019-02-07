@@ -1,0 +1,49 @@
+<div class="container outer-container">
+
+  <div class="jumbotron">
+    <h4>Post a Question</h4>
+      <form class="form-horizontal">
+          <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Title</label>
+              <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputEmail3" placeholder="Title" ng-model="title">
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="inputEmail3" class="col-sm-2 control-label">Body</label>
+              <div class="col-sm-10">
+              <input type="text" class="form-control" id="inputEmail3" placeholder="Body" ng-model="body">
+              </div>
+          </div>
+          <div class="form-group">
+              <label for="inputEmail4" class="col-sm-2 control-label">Select Category</label>
+              <div class="col-sm-10">
+                  <select id="inputEmail4" ng-model="selectedCategory" class="form-select">
+                    <option ng-repeat="category in categories" value="{{category.category_id}}">{{category.category_name}}</option>
+                  </select>
+          </div><br>
+          <div class="form-group">
+              <button class="btn btn-primary">Add Question</button>
+          </div>
+    
+      </form>
+    
+  </div>
+  <br>
+  <h4>Browse Question</h4>
+  <div ng-repeat="question in questions" class="question jumbotron">
+    <p>{{question.title}}</p>
+    <p>{{question.body}}</p>
+    <button class="btn btn-primary" ng-click="getAllReplies($index,question);selected.index=$index" ng-hide="selected.index === $index">Read More</button>
+    <div ng-show="selected.index === $index">
+      {{question.reply}}
+      <div ng-repeat="reply in question.reply">
+        {{reply}}
+      </div>
+      <div ng-if="question.reply.length === 0">
+        No replies
+      </div>
+    </div>
+  </div>
+  <br>
+</div>
