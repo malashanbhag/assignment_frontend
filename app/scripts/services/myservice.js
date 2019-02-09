@@ -46,11 +46,38 @@ angular.module('assignmentMiniQuoraFrontendApp')
       })
     };
 
+    var newQuestion = function(data){
+      return $http.post(url+'/newQuestion', data).then(function(success){
+        return success;
+      }).catch(function(error){
+        return error;
+      })
+    }
+
+    var addReply = function(data){
+      return $http.post(url+'/addReply', data).then(function(success){
+        return success;
+      }).catch(function(error){
+        return error;
+      })
+    }
+
+    var addVote = function(data){
+      return $http.post(url+'/addVote', data).then(function(success){
+        return success;
+      }).catch(function(error){
+        return error;
+      })
+    }
+
     return{
       login : login,
       getAllCategories : getAllCategories,
       getQuestions : getQuestions,
-      getAllReplies : getAllReplies
+      getAllReplies : getAllReplies,
+      newQuestion : newQuestion,
+      addReply : addReply,
+      addVote : addVote
     }
 
   });

@@ -8,7 +8,9 @@
  * Controller of the assignmentMiniQuoraFrontendApp
  */
 angular.module('assignmentMiniQuoraFrontendApp')
-  .controller('MainCtrl', function ($scope,myService) {
+  .controller('MainCtrl', function ($scope,myService,$state) {
+
+    $scope.reply = {};
 
     myService.getAllCategories().then(function(result){
       if(result.data.status){
@@ -32,6 +34,7 @@ angular.module('assignmentMiniQuoraFrontendApp')
     })
 
     $scope.getAllReplies = function(index, data){
+      $scope.selectedIndex = index;
       console.log('In get all reply ', data);
       myService.getAllReplies(data).then(function(result){
         console.log('Result from getAllReplies ', result);
@@ -44,6 +47,64 @@ angular.module('assignmentMiniQuoraFrontendApp')
         console.log('Error from getAllReplies ', error);
       })
     }
+
+    $scope.addNewQuestion = function(){
+      let data = {
+        'title' : $scope.title,
+        'body' : $scope.body,
+        'category' : $scope.selectedCategory,
+        'user_id' : sessionStorage.getItem('id')
+      };
+      console.log('New Question ', data);
+      myService.newQuestion(data).then(function(result){
+        console.log('result ', result);
+        //clear form
+        $scope.title = '';
+        $scope.body = '';
+        $scope.selectedCategory = '';
+        $state.reload();
+      }).catch(function(error){
+        console.log('Error while adding new question ',error);
+      })
+    };
+
+    $scope.addReply = function(index,question){
+      console.log('index passed ', index);
+      console.log('question_id passed ', question);
+      console.log('Reply ', $scope.reply[index]);
+      let data = {
+        'user_id' : sessionStorage.getItem('id'),
+        'question_id' : question.question_id,
+        'comment' : $scope.reply[index]
+      };
+      console.log('reply to ',data)
+      myService.addReply(data).then(function(result){
+        console.log('Replr result ', result);
+        //clear form
+        $scope.reply = [];
+        $state.reload();
+      }).catch(function(error){
+
+      });
+    };
+
+    $scope.addVote = function(reply,flag){
+      console.log('Reply passed ', reply);
+      console.log('Flag passed ', flag);
+      let data = {
+        'user_id' : sessionStorage.getItem('id'),
+        'question_id' : reply.question_id,
+        'reply_id' : reply.reply_id,
+        'flag' : flag
+      };
+      console.log('data passed ', data);
+      myService.addVote(data).then(function(result){
+        console.log('Result ', result);
+        $state.reload();
+      }).catch(function(error){
+        console.log('Error ', error);
+      });
+    };
     
 
   });

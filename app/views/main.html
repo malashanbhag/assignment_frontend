@@ -23,7 +23,7 @@
                   </select>
           </div><br>
           <div class="form-group">
-              <button class="btn btn-primary">Add Question</button>
+              <button class="btn btn-primary" ng-click="addNewQuestion()">Add Question</button>
           </div>
     
       </form>
@@ -32,13 +32,29 @@
   <br>
   <h4>Browse Question</h4>
   <div ng-repeat="question in questions" class="question jumbotron">
-    <p>{{question.title}}</p>
+    <p><h3>{{question.title}}</h3></p>
     <p>{{question.body}}</p>
-    <button class="btn btn-primary" ng-click="getAllReplies($index,question);selected.index=$index" ng-hide="selected.index === $index">Read More</button>
-    <div ng-show="selected.index === $index">
-      {{question.reply}}
+    <p>Posted by: {{question.user_name}} ({{question.user_email}})</p>
+    <button class="btn btn-primary" ng-click="getAllReplies($index,question);" ng-hide="selectedIndex === $index">Read More</button>
+    <div ng-show="selectedIndex === $index">
+      <div class="form-group">
+          <input type="text" placeholder="Reply" ng-model='reply[$index]'> 
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary" ng-click="addReply($index,question)">Add Reply</button>
+      </div>
+      REPLIES : 
       <div ng-repeat="reply in question.reply">
-        {{reply}}
+        <div>
+            Comment : {{reply.comment}}
+        </div>
+        <div>
+            By : {{reply.user_name}}({{reply.user_email}})
+        </div>
+        <div>
+            <button ng-click="addVote(reply,true)">Like</button> {{reply.like}} <br/>
+            <button ng-click="addVote(reply,false)">Dislike</button> {{reply.dislike}}
+        </div>
       </div>
       <div ng-if="question.reply.length === 0">
         No replies
